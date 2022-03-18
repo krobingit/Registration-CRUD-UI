@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const instance= axios.create({baseURL:"http://localhost:7000/"})
+const instance= axios.create({baseURL:"https://registration-crud-server.herokuapp.com/"})
 
 
 export default instance;
