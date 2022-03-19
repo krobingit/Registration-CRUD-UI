@@ -4,12 +4,15 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter as Router } from "react-router-dom";
+import { ConfirmProvider } from "material-ui-confirm";
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <ConfirmProvider>
+      <Router>
+        <App />
+      </Router>
+    </ConfirmProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );

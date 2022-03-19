@@ -9,7 +9,15 @@ const useUsers = () => {
   return useQuery(["users"], () => registerService.fetchUsers(), {
     select: (data) => {
       data.map((value) => {
-        value.contact_no = value.country_code + value.phone_no;
+        value.contact_no =
+          "+" +
+          value.country_code +
+          " " +
+          value.phone_no.substring(0, 3) +
+          " " +
+          value.phone_no.substring(3, 6) +
+          " " +
+          value.phone_no.substring(6, 10);
         return value;
       });
       return data;

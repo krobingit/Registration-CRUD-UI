@@ -2,10 +2,19 @@ import styled from "styled-components";
 import UsersGrid from "../Components/UsersGrid";
 import Button from "@mui/material/Button";
 import { useHistory } from "react-router-dom";
-import { useUsers,useDeleteUser } from "../hooks/register-hooks";
-//import { useConfirm } from "material-ui-confirm";
+import { useUsers, useDeleteUser } from "../hooks/register-hooks";
+import { useConfirm } from "material-ui-confirm";
 import { format } from "date-fns";
 import IconButton from "@mui/material/IconButton";
+import { useEffect, useState } from "react";
+import ClipLoader from "react-spinners/ClipLoader";
+
+const LoaderContainer = styled.div`
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+`;
 
 const Container = styled.div`
   min-height: 100vh;
@@ -19,7 +28,8 @@ const NewUser = styled.div`
   align-items: flex-end;
   justify-content: flex-end;
   margin-right: 1rem;
-  margin-top: 2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 2rem;
 `;
 const ButtonContainer = styled.div`
   display: flex;
@@ -36,14 +46,22 @@ const Flex = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-margin:0;
+  margin: 0;
 `;
 
 function Home() {
   let history = useHistory();
   const { data: usersData = [] } = useUsers();
+  const confirm = useConfirm();
   const { mutate } = useDeleteUser();
   const formatDate = (date) => format(new Date(date), "dd MMM yyyy");
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      if (usersData) setLoading(false);
+      else setLoading(true);
+    }, 500);
+  }, [usersData]);
   const columns = [
     {
       field: "profile_img",
@@ -110,7 +128,13 @@ function Home() {
             <IconButton onClick={() => history.push(`/update/${row._id}`)}>
               <i className="fas fa-edit" style={{ color: "goldenrod" }}></i>
             </IconButton>
-            <IconButton onClick={() => mutate({ userId:row?._id})}>
+            <IconButton
+              onClick={async () =>
+                await confirm({
+                  description: "Do you want to delete this user?",
+                }).then(() => mutate({ userId: row?._id }))
+              }
+            >
               <i className="fas fa-user-minus" style={{ color: "red" }}></i>
             </IconButton>
           </ButtonContainer>
@@ -118,25 +142,34 @@ function Home() {
       },
     },
   ];
-  return (
-    <>
-      <NewUser>
-        <Button
-          onClick={() => history.push("/register")}
-          variant="contained"
-          size="large"
-        >
-          Register User
-        </Button>
-      </NewUser>
-      <Flex>
-   <h2 style={{margin:"0"}}>USERS LIST</h2>
-      </Flex>
-      <Container>
-        <UsersGrid users={usersData} columns={columns} />
-      </Container>
-    </>
-  );
+
+  if (!loading) {
+    return (
+      <>
+        <NewUser>
+          <Button
+            onClick={() => history.push("/register")}
+            variant="contained"
+            size="large"
+          >
+            Register User
+          </Button>
+        </NewUser>
+        <Flex>
+          <h2 style={{ margin: "0" }}>USERS LIST({usersData?.length})</h2>
+        </Flex>
+        <Container>
+          <UsersGrid users={usersData} columns={columns} />
+        </Container>
+      </>
+    );
+  } else {
+    return (
+      <LoaderContainer>
+        <ClipLoader loading={loading} margin="5px" color="purple" size={30} />
+      </LoaderContainer>
+    );
+  }
 }
 
 export default Home;

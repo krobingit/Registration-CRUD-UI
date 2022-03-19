@@ -422,11 +422,7 @@ function UpdateUser() {
                           <FormControlLabel
                             key={idx}
                             value={value}
-                            control={
-                              <Radio
-
-                              />
-                            }
+                            control={<Radio />}
                             label={value}
                           />
                         ))}

@@ -224,20 +224,19 @@ function Register() {
       }
     );
   }
-  const handleSubmit=(values)=>{
-  mutate(
-            { ...values },
-            {
-              onSuccess: () => {
-                ToastSuccess();
-                setTimeout(() => {
-                  history.push("/");
-                }, 2500);
-              },
-            }
-          );
-
-  }
+  const handleSubmit = (values) => {
+    mutate(
+      { ...values },
+      {
+        onSuccess: () => {
+          ToastSuccess();
+          setTimeout(() => {
+            history.push("/");
+          }, 2500);
+        },
+      }
+    );
+  };
 
   const { mutate } = useRegisterUser();
   return (
@@ -271,12 +270,9 @@ function Register() {
         }}
         validationSchema={getRegistrationDetailsYupSchema(yup)}
         onSubmit={(values) => {
-          if(file)
-          handleSubmitWithPic(values)
-          else
-            handleSubmit(values)
-        }
-        }
+          if (file) handleSubmitWithPic(values);
+          else handleSubmit(values);
+        }}
       >
         {({ values, handleChange, setFieldValue, errors, touched }) => (
           <Form>
@@ -428,37 +424,39 @@ function Register() {
                   />
                 </FieldContainer>
               </HStack>
-             <HStack>
-              <CheckBoxFieldContainer>
-                <LabelText>Preferred Location</LabelText>
-                <FormControl name="locations">
-                  {locationOptions.map((value, idx) => (
-                    <Field key={idx} name="locations">
-                      {({ field }) => {
-                        return (
-                          <FormControlLabel
-                            label={value}
-                            {...field}
-                            control={
-                              <Checkbox
-                                value={value}
-                                sx={{
-                                  "& .MuiSvgIcon-root": { fontSize: 28 },
-                                }}
-                              />
-                            }
-                          />
-                        );
-                      }}
-                    </Field>
-                  ))}
-                  <ErrorMessage>
-                    {errors.locations && touched.locations && errors.locations}
-                  </ErrorMessage>
-                </FormControl>
+              <HStack>
+                <CheckBoxFieldContainer>
+                  <LabelText>Preferred Location</LabelText>
+                  <FormControl name="locations">
+                    {locationOptions.map((value, idx) => (
+                      <Field key={idx} name="locations">
+                        {({ field }) => {
+                          return (
+                            <FormControlLabel
+                              label={value}
+                              {...field}
+                              control={
+                                <Checkbox
+                                  value={value}
+                                  sx={{
+                                    "& .MuiSvgIcon-root": { fontSize: 28 },
+                                  }}
+                                />
+                              }
+                            />
+                          );
+                        }}
+                      </Field>
+                    ))}
+                    <ErrorMessage>
+                      {errors.locations &&
+                        touched.locations &&
+                        errors.locations}
+                    </ErrorMessage>
+                  </FormControl>
                 </CheckBoxFieldContainer>
                 <FieldContainer></FieldContainer>
-</HStack>
+              </HStack>
               {progress !== 0 && upload && (
                 <Box sx={{ width: "100%" }}>
                   <LinearProgressWithLabel value={progress} />

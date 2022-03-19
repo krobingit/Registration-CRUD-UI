@@ -32,7 +32,8 @@ export const getRegistrationDetailsYupSchema = (yup) => {
     phone_no: yup
       .string()
       .typeError(registerErrorMessages.ENTER_PHONE_NO)
-      .required(registerErrorMessages.ENTER_PHONE_NO),
+      .required(registerErrorMessages.ENTER_PHONE_NO)
+      .test("length", "Must be exactly 10 digits", (val) => val.length === 10),
     locations: yup
       .array()
       .compact()
